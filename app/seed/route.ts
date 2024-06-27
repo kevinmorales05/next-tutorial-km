@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+type ClientWithSql = {
+  sql: (query: TemplateStringsArray, ...params: any[]) => Promise<any>;
+};
 
 const { db } = require('@vercel/postgres');
 const {
@@ -9,7 +12,7 @@ const {
 } = require('../lib/placeholder-data');
 const bcrypt = require('bcrypt');
 
-async function seedUsers(client) {
+async function seedUsers(client: ClientWithSql) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
     // Create the "users" table if it doesn't exist
@@ -48,7 +51,7 @@ async function seedUsers(client) {
   }
 }
 
-async function seedInvoices(client) {
+async function seedInvoices(client: ClientWithSql) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
@@ -88,7 +91,7 @@ async function seedInvoices(client) {
   }
 }
 
-async function seedCustomers(client) {
+async function seedCustomers(client: ClientWithSql) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
@@ -127,7 +130,7 @@ async function seedCustomers(client) {
   }
 }
 
-async function seedRevenue(client) {
+async function seedRevenue(client: ClientWithSql) {
   try {
     // Create the "revenue" table if it doesn't exist
     const createTable = await client.sql`
